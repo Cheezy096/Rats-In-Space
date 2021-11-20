@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<head>
+    <title>/b/ - {{boards}} - Rats In Space</title>
+</head>
+
+<body>
+    <a href="/">Take me back to the board list!</a>
+    <h1>{{boards}}</h1>
+    <form action="/b/{{board_id}}/post" method="POST">
+        <p>
+            <p>your message goes here:</p>
+            <input type="text" name="board_content"/>
+        </p>
+        <p>
+            <input type="submit" value="post"/>
+        </p>
+    </form>
+
+    <br>
+
+    {% for x in posts %}
+
+        {% if posts[x][0] == str_board_id %}
+            <p>Anon: {{posts[x][1]}}</p>
+        {% endif %}
+
+    {% endfor %}
+</body>

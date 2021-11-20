@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<link rel="stylesheet" type="text/css" href="/_static/css/banner-styles.css?v=omkqRugM" />
+<link rel="stylesheet" type="text/css" href="/_static/css/iconochive.css?v=qtvMKcIJ" />
+
+    <title>/b/ - {{board[0]}} - [Rats In Space]</title>
+    <style type="text/css" media="Screen,Projection,TV" title="Minimal">
+        /* \*/
+        @import "/static/css/3029.css";
+        @import "/static/css/min3029.css";
+        /* */
+        @import "/static/css/555.css";
+        /* \*/
+        #mac-ie {display:none}
+        /* */
+    </style>
+    
+</head>
+
+<body id="deviantART" class="user"><!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<style type="text/css">
+	body {
+		margin-top:0 !important;
+		padding-top:0 !important;
+		/*min-width:800px !important;*/
+	}
+</style>
+
+<div id="body">
+	<div style="width: 960px; margin: 0 auto;">
+
+	<div id="head">
+
+	<h1 style="background: none !important;">
+		<span>
+			</span>
+			<sup style="left: unset !important; font-style: italic; color: #5a695f; font-size: 50%; font-weight: bold;">
+				<a href="/">[RATS IN SPACE]</a>
+			</sup>
+	</h1>
+
+	<div id="bar-deviant">
+	<div id="bar-deviant-ctrl1"><div id="bar-deviant-ctrl2"><div id="bar-deviant-ctrl3"><div id="bar-deviant-ctrl4">
+	<div id="bar-deviant-core">
+		<div class="mod-double">
+				<div style="color: #23332A  !important;">Navigation Bar</div>
+			</form>
+			
+		</div>
+	</div>
+	</div></div></div></div>
+	</div> <!--/bar-deviant-->
+	<div id="bar-main"><div id="bar-main-ctrl1"><div id="bar-main-ctrl2"><div id="bar-main-ctrl3">
+
+		<table style="border-collapse:collapse;">
+		<tr>
+		<td class="lefto">
+
+		<table class="toolbar text-toolbar">
+			<tr>
+			<td class="shop">
+				<a href="/"><img src="/static/images/GIFS/browse.gif" alt=""/><span>Browse</span></a>
+				<span class="hsep"> | </span>
+			</td>
+
+			<td class="shop">
+				<a href="/newboard"><img src="/static/images/GIFS/faq.gif" alt=""/><span>New Board</span></a>
+				<span class="hsep"> | </span>
+			</td>
+
+			<td class="shop">
+				<a href="/random"><img src="/static/images/GIFS/faq.gif" alt=""/><span>Random</span></a>
+				<span class="hsep"> | </span>
+			</td>
+
+			<td class="shop">
+				<a href="/allposts"><img src="/static/images/GIFS/browse.gif" alt=""/><span>All threads</span></a>
+				<span class="hsep"> | </span>
+			</td>
+			</tr>
+		</table>
+		</td>
+		<td class="righto">
+		<table class="toolbar text-toolbar">
+			<tr>
+			<td class="last">
+				<a title="Help and Frequently Asked Questions" href="/help"><img src="/static/images/GIFS/faq.gif" alt=""/><span>Help</span></a>
+			</td>
+			</tr>
+		</table>
+		</td>
+		</tr>
+		</table>
+
+
+	</div></div></div></div> <!--/bar-main-->
+
+	</div> <!--/head-->
+
+
+
+	<div id="output">
+
+	<div class="output-primary ie-paintfix" style="text-align:center">
+
+
+	</div></div>
+
+
+			<div id="user" class="output-primary">
+
+	<div class="thread section">
+	<h2 class="section-head"><a href="/b/{{board[2]}}">{{board[0]}}</a>: {{board[1]}}</h2>
+
+	<div style="padding-top:4px;text-align:center">
+		<form action="/b/{{board[2]}}/post" method="POST">
+				<br>
+				<div class="output-primary" style="text-align:center"><div style="background:#9AA29A;width:728px;margin:auto;padding:4px !important;margin:-7px auto 20px auto !important;text-align:left">
+
+				<textarea cols=" id="body" name="board_content" rows="5" style="width: 99.1%;"></textarea>
+				<br>
+				<br>
+				<input type="submit" value="Create thread." style="border-style:solid; border-color: #494949; background-color: #585f5b; color: white; width: 100%; height: 30px;"/>
+				</div></div>
+		</form>
+	</div>
+
+
+	<div>
+	<input type="hidden" name="ref" value="http://forum.deviantart.com/devart/help/610231/"/>
+	<input type="hidden" name="threadid" value="610231"/>
+	</div>
+
+
+	{% set count = namespace(value=0) %}
+
+	{% for x in thread %}
+
+		<div class="item">
+			<div class="item-head float-holder">
+				<strong><a href="/b/{{board[2]}}/{{x[1]}}">Jump to thread</a></strong><br/>
+			</div>
+			<div class="trailing item-body">
+				{{x[0]}}
+			</div>
+		</div>
+
+		{% set count.value = count.value + 1 %}
+
+
+	{% endfor %}
+
+	{% if count.value == 0 %}
+		<br>
+		<div class="item">
+			<div class="item-head float-holder">
+				<a id="c13167555"></a>
+				<strong>No comments are available for this board.</strong><br/>
+			</div>
+			<div class="trailing item-body">
+				<br>
+			</div>
+		</div>
+
+	{% endif %}
+
+	</div>
+	</form>
+
+	</div>
+
+	<hr/>
+
+	<div style="clear:both">&nbsp;</div>
+	<div class="output-primary" style="text-align:center"><div style="background:#9AA29A;width:728px;margin:auto;padding:4px !important;margin:-7px auto 20px auto !important;text-align:left">
+
+	<div style="padding-top:4px;text-align:center">
+		{{adFoot[0]}}
+		<a href="{{adFoot[2]}}">{{adFoot[1]}}</a>
+	</div>
+	</div></div>
+
+	<div class="output-primary ie-floatfix" id="address">
+
+	<div class="first last section">    <div>
+			<a href="#">About</a> |
+			<a href="#">Contact</a> |
+			<a href="#">Advertise</a> |
+			<a href="#">Terms of Service</a> |
+			<a href="#">Privacy Policy</a> |
+			<a href="#">Etiquette Policy</a>
+		</div>
+		<br/>
+		&copy; 2005 <a href="/">[Rats In Space]</a>.
+		<div>very hq website.</div>
+
+	</div>
+	</div> <!--/address-->
+	</div>
+</div> <!--/body-->
+
+
+<a id="deviantART-loves-you"/>
+
+</body>
+</html>
