@@ -1,0 +1,81 @@
+{% extends "ph/base.html" %}
+
+{% block title %}
+
+<title>/b/ - {{board[0]}} - [Rats In Space]</title>
+
+{% endblock %}
+
+{% block content %}
+
+<div id="output">
+
+	<div class="output-primary ie-paintfix" style="text-align:center">
+
+
+	</div></div>
+
+
+			<div id="user" class="output-primary">
+
+	<div class="thread section">
+	<h2 class="section-head" style="font-size: 35px !important;"><a href="/b/{{board[2]}}" >{{board[0]}}</a>: {{board[1]}}</h2>
+
+	<div>
+	<input type="hidden" name="ref" value="http://forum.deviantart.com/devart/help/610231/"/>
+	<input type="hidden" name="threadid" value="610231"/>
+	</div>
+
+
+	{% set count = namespace(value=0) %}
+
+	{% for x in thread %}
+
+		<div class="item">
+			<div class="item-head float-holder" style="font-size: 30px !important;">
+				<strong><a href="/b/{{board[2]}}/{{x[1]}}">Jump to thread</a></strong><br/>
+			</div>
+			<div class="trailing item-body" style="font-size: 30px !important;">
+				{{x[0]}}
+			</div>
+		</div>
+
+		{% set count.value = count.value + 1 %}
+
+
+	{% endfor %}
+
+	{% if count.value == 0 %}
+		<br>
+		<div class="item">
+			<div class="item-head float-holder">
+				<a id="c13167555"></a>
+				<strong>No threads can be found.</strong><br/>
+			</div>
+			<div class="trailing item-body">
+				<br>
+			</div>
+		</div>
+
+	{% endif %}
+
+
+	<div style="padding-top:4px;text-align:center;">
+		<form action="/b/{{board[2]}}/post" method="POST">
+				<br>
+				<div class="output-primary" style="text-align:center"><div style="background:#9AA29A;width:728px;margin:auto;padding:4px !important;margin:-7px auto 20px auto !important;text-align:left">
+
+				<textarea cols=" id="body" name="board_content" rows="5" style="width: 99.1%; font-size: 35px;"></textarea>
+				<br>
+				<br>
+				<input type="submit" value="Create thread." style="font-size: 35px !important; border-style:solid; border-color: #494949; background-color: #585f5b; color: white; width: 100%; height: 60px;"/>
+				</div></div>
+		</form>
+	</div>
+
+	</div>
+	</form>
+
+	</div>
+
+{% endblock %}
