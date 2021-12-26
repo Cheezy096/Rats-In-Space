@@ -1,0 +1,35 @@
+{% extends "cosmic/base.html" %}
+
+{% block content %}
+
+    <h3><a href="/">Board List</a> >> <a href="/b/{{board[2]}}">{{board[0]}}</a> >> {{thread[0]}}</h3>
+
+    {% set count = namespace(value=0) %}
+	{% for x in post %}
+        {% if x[2] == board[2] %}
+            <table style="width:100%; table-layout: fixed;">
+                <tr>
+                    <th style="font-weight:normal;"><b>User:</b> Anon (ID)<br><b>Date:</b> Apr 6, 2006, 7:13:34 PM</th>
+                </tr>
+
+                <tr>
+                    <td style="word-wrap: break-word;">{{x[0]}}</td>
+                </tr>
+            </table>
+            <br>
+            {% set count.value = count.value + 1 %}
+
+        {% endif %}        
+
+    {% endfor %}
+
+
+    {% if count.value == 0 %}
+
+        <tr>
+            <td colspan="3"><strong>No comments available.</strong></td>
+        </tr>
+    {% endif %}
+
+
+{% endblock %}

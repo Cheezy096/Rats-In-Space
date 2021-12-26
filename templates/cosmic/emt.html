@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/main.css">
+    </head>
+
+    <script>
+        function openCity(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        function start() {
+            document.getElementById('homeButton').click();
+        }
+    </script>
+
+    {% if session["useNav"] %}
+
+        <body> 
+    {% else %}
+        <body onload="start();"> 
+    {% endif %}
+
+        <div class="main">
+
+            <div class="header">
+                <h2 style="font-size: 30px;"><i>[RATS IN SPACE]</i></h2>
+
+                {% if session["username"] %}
+                    <p> Welcome, <b>{{session["username"]}}</b><br><a href="/logout" class="brightlink">Logout</a></p>
+                {% else %}
+                    <p>Woah ass ahoy<br><a href="/login" class="brightlink">Log in</a> or <a href="/login" class="brightlink">Register</a></p>
+                        
+                {% endif %}
+
+            </div>
+
+
+            {% if session["useNav"] %}
+                <div class="tab2">
+                    <button id="homeButton" class="tablinks" onclick="location.href='/'">Main</button>
+                    <button class="tablinks" onclick="location.href='/users'">All users</button>
+                    <button class="tablinks" onclick="location.href='/help'">Help</button>
+                </div>
+                <br>
+            {% else %}
+                <div class="tab">
+                    <button id="homeButton" class="tablinks" onclick="openCity(event, 't1')">Main</button>
+                    <button class="tablinks" onclick="openCity(event, 't2')">All users</button>
+                    <button class="tablinks" onclick="openCity(event, 't3')">Help</button>
+                </div>
+            {% endif %}
+
+            <div class="tabcontenta">
+                <div id="t1" class="tabcontent">
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+
+                {% if not session["useNav"] %}
+
+
+                    <div id="t2" class="tabcontent">
+                        <h3>User list</h3>
+
+                        <table style="width:100%;"">
+                            <tr>
+                                <th>Name</th>
+                                <th>Info</th>
+                                <th width="4%">ID</th>
+                            </tr>
+                            {% set count = namespace(value=0) %}
+                    
+                            {% for x in users %}
+                                {% set count.value = count.value + 1 %}
+                    
+                            <tr>
+                                <td><a href="/b/{{x[2]}}">{{x[0]}}</a></td>
+                                <td>{{x[1]}}</td>
+                                <td>{{x[2]}}</td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </table>
+                    </div>
+
+                    <div id="t3" class="tabcontent">
+                        <h3>Help</h3>
+                        <p style="margin: 0;">Q: How do i login?<br>A: You do not.</p>
+                        <br>
+                        <p style="margin: 0;">Q: How do i login?<br>A: You do not.</p>
+
+                    </div>
+                    {% endif %}
+
+            </div>
+
+            
+            <div class="footer">
+                <div>© 2005 [Rats In Space] BETA!</div>
+                <div>very hq website.</div>
+                <br>
+                <a href="/beta">Take me back to the old page!</a>
+            </div>
+        </div>
+
+    </body>
+</html> 
