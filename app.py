@@ -1,4 +1,4 @@
-import json, sqlite3, builtins, random, jinja2, werkzeug.security
+import json, sqlite3, builtins, random, jinja2, werkzeug.security, datetime
 from functools import wraps
 from flask import Flask, redirect, url_for, render_template, request, session, abort
 from etc import database
@@ -139,7 +139,7 @@ def register():
         else:
             password = request.form["password"]
 
-        cursor.execute("INSERT INTO users(username, password, id, type) VALUES(?,?,?,?)", (request.form["username"], password, userID + 1, 0,))
+        cursor.execute("INSERT INTO users(username, password, id, type, date) VALUES(?,?,?,?,?)", (request.form["username"], password, userID + 1, 0, datetime.datetime.now().strftime("%d %B %Y, %H:%M:%S (%I:%M:%S%p)"),))
         sql.commit()
 
         userInfo = cursor.execute("SELECT * from `users` WHERE username = ?", (request.form["username"],)).fetchone()
