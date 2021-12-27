@@ -45,7 +45,6 @@ def render(temp=None, **kwargs):
     except jinja2.exceptions.TemplateNotFound:
         abort(404)
 
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
@@ -245,7 +244,7 @@ def new_thread(board):
     return redirect(url_for("board", board=board))
 
 @app.route("/users")
-def userlist():
+def user_list():
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
     users = cursor.execute("SELECT * FROM users").fetchall()
 
