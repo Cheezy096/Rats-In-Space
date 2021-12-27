@@ -1,7 +1,6 @@
-import json, sqlite3, builtins, random, jinja2
+import json, sqlite3, builtins, random, jinja2, werkzeug.security, datetime
 from functools import wraps
 from flask import Flask, redirect, url_for, render_template, request, session, abort
-from datetime import timedelta
 from etc import database
 
 database.connect()
@@ -135,7 +134,7 @@ def register():
             else:
                 userID = -1
         
-        cursor.execute("INSERT INTO users(username, password, id, type) VALUES(?,?,?,?)", (request.form["username"], request.form["password"], userID + 1, 0,))
+        cursor.execute("INSERT INTO users(username, password, id, type, date) VALUES(?,?,?,?,?)", (request.form["username"], request.form["password"], userID + 1, 0, datetime.datetime.now().strftime("%d %B %Y, %H:%M:%S (%I:%M:%S%p)"),))
         sql.commit()
 
         userInfo = cursor.execute("SELECT * from `users` WHERE username = ?", (request.form["username"],)).fetchone()
@@ -143,7 +142,6 @@ def register():
         session["username"] = userInfo[0]
         session["id"] = userInfo[2]
         session["type"] = userInfo[3]
-        print(userInfo)
     return redirect(url_for("index"))
 
 @app.route("/delboard/<board>/", methods=["GET", "POST"])
