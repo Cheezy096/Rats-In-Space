@@ -1,4 +1,4 @@
-import json, sqlite3, builtins, random, jinja2, werkzeug.security, datetime
+import json, sqlite3, builtins, random, jinja2, werkzeug.security
 from functools import wraps
 from flask import Flask, redirect, url_for, render_template, request, session, abort
 from etc import database
@@ -96,7 +96,8 @@ def login():
         if not userInfo: 
             return render("login.html", dumbname=True, dumbpass=False, adFoot=randomAdFoot)
 
-        if userInfo[1] != request.form["password"]:
+        hash_check = werkzeug.security.check_password_hash(userInfo[1], request.form["password"])
+        if not hash_check:
             return render("login.html", dumbname=False, dumbpass=True, adFoot=randomAdFoot)
 
         session["username"] = userInfo[0]
@@ -134,7 +135,12 @@ def register():
             else:
                 userID = -1
         
-        cursor.execute("INSERT INTO users(username, password, id, type, date) VALUES(?,?,?,?,?)", (request.form["username"], request.form["password"], userID + 1, 0, datetime.datetime.now().strftime("%d %B %Y, %H:%M:%S (%I:%M:%S%p)"),))
+        if not request.form.get("nohash"):
+            password = werkzeug.security.generate_password_hash(request.form["password"])
+        else:
+            password = request.form["password"]
+
+        cursor.execute("INSERT INTO users(username, password, id, type) VALUES(?,?,?,?)", (request.form["username"], password, userID + 1, 0,))
         sql.commit()
 
         userInfo = cursor.execute("SELECT * from `users` WHERE username = ?", (request.form["username"],)).fetchone()
@@ -251,6 +257,14 @@ def randomBoard():
     if not boardID: return abort(404)
     randomBoardID = random.randint(0, boardID)
     return redirect(url_for("board", board=randomBoardID))
+
+@app.route("/test", methods=["GET", "POST"])
+def test():
+    if request.method == "GET":
+        return render("tagger.html")
+    else:
+        print(request.form.get("test"))
+        return redirect(url_for("index"))
 
 @app.errorhandler(404)
 def page_not_found(a):
