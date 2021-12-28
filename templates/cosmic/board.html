@@ -6,14 +6,21 @@
 
     <br>
     <form action="/b/{{board[2]}}/post" method="POST" style="width: 60%; margin-left: 20%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
+
         <h3>Create a thread!</h3>
 
         <textarea cols=" id="body" name="board_content" rows="5" style="width: 80%;"></textarea>
         <br>
         <br>
         <input id="generalButton" type="submit" value="Create thread"/>
-        <br>
-        <br>
+        {% if boardPostFailed %}
+            <p style="color: rgb(109, 0, 0); font-size: 15px;">{{boardPostFailed}}</p>
+        {% else %}
+            <br>
+            <br>
+        {% endif %}
+
+
     </form>
     <br>
     <br>

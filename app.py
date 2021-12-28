@@ -55,7 +55,7 @@ def index():
         users = cursor.execute("SELECT * FROM users").fetchall()
         return render("index.html", boards=boards, users=users, adFoot=randomAdFoot, session=session)
     except sqlite3.ProgrammingError:
-        return "PISS"
+        return "this is not working"
 
 @app.route("/beta")
 def beta():
@@ -182,8 +182,38 @@ def new_board():
         sql.commit()
     return redirect(url_for("board", board=boardID + 1))
 
+@app.route("/help")
+def help():
+    randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
+
+    return render("help.html", adFoot=randomAdFoot)
+
+@app.route("/p/<post>")
+def goto_post(post):
+    session["flashCommentHeader"] = ["False", 0]
+    postInfo = cursor.execute("SELECT * FROM posts WHERE msg_id = ?", (post,)).fetchone()
+    
+    if not postInfo:
+        return redirect(url_for("index"))
+    
+    session["flashCommentHeader"] = [postInfo[1], 0]
+    return redirect(url_for("thread", board=postInfo[2], thread=postInfo[3]) + f"#{postInfo[1]}")
+
 @app.route("/b/<board>/")
 def board(board):
+
+    try:
+        print(session["boardPostFailed"])
+        if session["boardPostFailed"][1] != 0:
+            session["boardPostFailed"] = [False, 0]
+
+        if session["boardPostFailed"][0] != False:
+            print("nigger")
+            session["boardPostFailed"] = [session["boardPostFailed"][0], 1]
+
+    except KeyError:
+        session["boardPostFailed"] = [False, 0]
+
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
 
     boards = cursor.execute("SELECT * FROM boards WHERE board_id = ?", (board,)).fetchone()
@@ -193,16 +223,33 @@ def board(board):
     if not boards:
         abort(404)
 
-    return render("board.html", thread=threads, board=boards, users=users, adFoot=randomAdFoot)
-
-@app.route("/help")
-def help():
-    randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
-
-    return render("help.html", adFoot=randomAdFoot)
+    return render("board.html", thread=threads, board=boards, users=users, adFoot=randomAdFoot, boardPostFailed=session["boardPostFailed"][0])
 
 @app.route("/b/<board>/<thread>")
 def thread(board, thread):
+
+    try:
+        if session["threadPostFailed"][1] != 0:
+            session["threadPostFailed"] = [False, 0]
+
+        if session["threadPostFailed"][0] != False:
+            session["threadPostFailed"] = [session["threadPostFailed"][0], 1]
+
+    except KeyError:
+        session["threadPostFailed"] = [False, 0]
+
+    try:
+        if session["flashCommentHeader"][1] != 0:
+            session["flashCommentHeader"] = ["False", 0]
+
+        if session["flashCommentHeader"][0] != "False":
+            session["flashCommentHeader"] = [session["flashCommentHeader"][0], 1]
+
+    except KeyError:
+        session["flashCommentHeader"] = ["False", 0]
+
+    print(session["flashCommentHeader"])
+
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
     
     boards = cursor.execute("SELECT * FROM boards WHERE board_id = ?", (board,)).fetchone()
@@ -213,10 +260,16 @@ def thread(board, thread):
     if not threads:
         abort(404)
 
-    return render("thread.html", thread=threads, board=boards, post=posts, users=users, adFoot=randomAdFoot)
+    return render("thread.html", thread=threads, board=boards, post=posts, users=users, threadPostFailed=session["threadPostFailed"][0], flashCommentHeader=session["flashCommentHeader"][0], adFoot=randomAdFoot)
 
 @app.route("/b/<board>/<thread>/post", methods=["GET", "POST"])
 def new_thread_comment(board, thread):
+    session["threadPostFailed"] = [False, 0]
+    
+    if len(request.form["thread_content"].split()) < 1:
+        session["threadPostFailed"] = ["Cannot send an empty message!", 0]
+        return redirect(url_for("thread", board=board, thread=thread))
+
     postsID = cursor.execute("SELECT MAX(msg_id) FROM `posts`").fetchone()[0]
     if not postsID:
         if postsID == 0:
@@ -231,6 +284,12 @@ def new_thread_comment(board, thread):
 
 @app.route("/b/<board>/post", methods=["GET", "POST"])
 def new_thread(board):
+    session["boardPostFailed"] = [False, 0]
+    
+    if len(request.form["board_content"].split()) < 1:
+        session["boardPostFailed"] = ["Cannot create a board with an empty name!", 0]
+        return redirect(url_for("board", board=board))
+
     threadID = cursor.execute("SELECT MAX(thread_id) FROM `threads`").fetchone()[0]
     if not threadID:
         if threadID == 0:

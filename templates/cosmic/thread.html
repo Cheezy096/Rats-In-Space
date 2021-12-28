@@ -12,8 +12,13 @@
         <br>
         <br>
         <input id="generalButton" type="submit" value="Post comment"/>
-        <br>
-        <br>
+        {% if threadPostFailed %}
+                <p style="color: rgb(109, 0, 0); font-size: 15px;">{{threadPostFailed}}</p>
+        {% else %}
+            <br>
+            <br>
+        {% endif %}
+
     </form>
     <br>
     <br>
@@ -22,8 +27,14 @@
 	{% for x in post %}
         {% if x[2] == board[2] %}
             <table style="width:100%; table-layout: fixed;">
+                <a name="{{x[1]}}"></a>
                 <tr>
-                    <th style="font-weight:normal;"><b>User:</b> Anon (ID)<br><b>Date:</b> {{x[4]}}</th>
+                {% if flashCommentHeader == x[1] %}
+                    <th style="font-weight:normal; background-color: rgb(0, 0, 190) !important; color: white !important;"><b>User:</b> Anon <a href="/p/{{x[1]}}" style="color: aqua;">({{x[1]}})</a><br><b>Date:</b> {{x[4]}}</th>
+                {% else %}
+                    <th style="font-weight:normal;"><b>User:</b> Anon <a href="/p/{{x[1]}}">({{x[1]}})</a><br><b>Date:</b> {{x[4]}}</th>
+                {% endif %} 
+                
                 </tr>
 
                 <tr>
