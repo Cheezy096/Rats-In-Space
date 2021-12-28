@@ -1,61 +1,51 @@
-{% extends "ph/base.html" %}
-
-{% block title %}
-
-<title>Board List - [Rats In Space]</title>
-
-{% endblock %}
+{% extends "cosmic/base.html" %}
 
 {% block content %}
 
-<div id="output">
+    <form action="/newboard" method="GET">
+        <h3>
+            Board List
+            <br>
+            {% if session["type"] == 1 %} 
+                <input type="submit" value="Create a board" style="font-size: 14px; border-style:solid; border-color: #494949; background-color: #585f5b; color: white; width: 90x; height: 25px; margin-top: 0%"/> 
+            {% endif %} 
+        </h3>
+    </form>
 
-    <div class="output-primary ie-paintfix" style="text-align:center">
-
-
-    </div></div>
-
-
-    <div id="user" class="output-primary">
-
-        <div class="thread section">
-        <h2 class="section-head" style="font-size: 35px !important;">Board List</h2>
-        <br>
-        <table class="section-block grid">
-        <tbody><tr style="font-size: 30px !important;">
-            <th>Board Name</th>
+    <table style="width:100%;"">
+        <tr>
+            <th>Name</th>
             <th>Info</th>
-            <th width="10%">ID</th>
+            <th width="4%">ID</th>
         </tr>
-
         {% set count = namespace(value=0) %}
-                        
-                        
+
         {% for x in boards %}
             {% set count.value = count.value + 1 %}
-            <p>    
-                <tr class="even" valign="top" style="font-size: 30px !important; text-align: center;">
-                    <td class="odd"><br><div style="padding-left:1.5em;"><strong><a href="/b/{{x[2]}}">{{x[0]}}</a></strong><br></div><br></td>
-                    <td class="odd"><br>{{x[1]}}<br></td>
-                    <td class="even" style="text-align: center;"><br>{{x[2]}}<br></td>
+
+            <form action="/delboard/{{x[2]}}/" method="POST">
+                <tr>
+                    <td>
+                        <a href="/b/{{x[2]}}">{{x[0]}}</a>
+                        {% if session["type"] == 1 %} 
+                            <input type="submit" value="Delete board" style="float: right; font-size: 10px; border-style:solid; border-color: #494949; background-color: #585f5b; color: white; width: 90x; height: 20px;"/> 
+                        {% endif %}
+                    </td>
+                    <td>{{x[1]}}</td>
+                    <td>{{x[2]}} </td>
                 </tr>
-            </p>
+            </form>
         {% endfor %}
 
         {% if count.value == 0 %}
 
-            <tr class="beacon">
-                <td colspan="5"><div style="padding-left:0em;"><strong>No active boards.</strong></div></td>
-            </tr>
+        <tr>
+            <td colspan="3"><strong>No active boards.</strong></td>
+        </tr>
 
         {% endif %}
 
-        </tbody></table>
-        
-        </div>
-                </div>
+</table>
 
-
-    </form>
 
 {% endblock %}

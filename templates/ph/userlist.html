@@ -1,61 +1,38 @@
-{% extends "ph/base.html" %}
-
-{% block title %}
-
-<title>Board List - [Rats In Space]</title>
-
-{% endblock %}
+{% extends "cosmic/base.html" %}
 
 {% block content %}
 
-<div id="output">
+<h3>User List</h3>
 
-    <div class="output-primary ie-paintfix" style="text-align:center">
+<table style="width:100%;"">
+    <tr>
+        <th>Name</th>
+        <th>Creation Date</th>
+        <th width="4%">Type</th>
+        <th width="4%">ID</th>
+    </tr>
+    {% set count = namespace(value=0) %}
+                    
+    {% for x in users %}
+        {% set count.value = count.value + 1 %}
 
+    <tr>
+        <td><a href="/b/{{x[2]}}">{{x[0]}}</a></td>
+        <td>{{x[4]}}</td>
+        <td>{{x[3]}}</td>
+        <td>{{x[2]}}</td>
+    </tr>
 
-    </div></div>
+    {% endfor %}
 
+    {% if count.value == 0 %}
 
-    <div id="user" class="output-primary">
-
-        <div class="thread section">
-        <h2 class="section-head">Board List</h2>
-
-        <table class="section-block grid">
-        <tbody><tr>
-            <th>User Name</th>
-            <th>User Creation Date</th>
-            <th width="4%">ID</th>
+        <tr>
+            <td colspan="4"><strong>No users registered.</strong></td>
         </tr>
+    {% endif %}
 
-        {% set count = namespace(value=0) %}
-                        
-                        
-        {% for x in users %}
-            {% set count.value = count.value + 1 %}
-            <p>    
-                <tr class="even" valign="top">
-                    <td class="odd"><div style="padding-left:1.5em;"><strong><a href="/b/{{x[2]}}">{{x[0]}}</a></strong><br></div></td>
-                    <td class="odd">{{x[2]}}</td>
-                    <td class="even" style="text-align: center;">{{x[2]}}</td>
-                </tr>
-            </p>
-        {% endfor %}
+</table>
 
-        {% if count.value == 0 %}
-
-            <tr class="beacon">
-                <td colspan="5"><div style="padding-left:0em;"><strong>No active boards.</strong></div></td>
-            </tr>
-
-        {% endif %}
-
-        </tbody></table>
-        
-        </div>
-                </div>
-
-
-    </form>
 
 {% endblock %}

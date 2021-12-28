@@ -1,14 +1,14 @@
-import json, sqlite3, builtins, random, jinja2, werkzeug.security, datetime
+import sqlite3, builtins, random, jinja2, werkzeug.security, datetime, os
 from functools import wraps
 from flask import Flask, redirect, url_for, render_template, request, session, abort
 from etc import database
 
 database.connect()
 app = Flask(__name__)
-app.secret_key = "iamakey"
+app.secret_key = str(os.urandom(24))
 
 r = 2
-builtins.randomAdFoot = [["Do you like spaghetti? I sure do!", "Check out Marisa Space for some spaghetti!", "http://chiyo.org/"], ["The best content platform around!","VidLii!", "https://vili.co/"], ["Miss the days of realism in art? Worry no more!", "Hyper-realistic Sonic is here to save us!", "https://c.tenor.com/9z3rpvYfoDIAAAAM/sonic-and-mario-kiss.gif"]] # Turn this into JSON file
+builtins.randomAdFoot = [["Zombo!", "WELCOME TO ZOMBO COM", "https://www.zombo.com/"], ["404.","Give it to me, now!", "/thisisnotreal"], ["Sonic The Hedgehog and Mayo the Plumber!", "Anything is possible.", "https://c.tenor.com/9z3rpvYfoDIAAAAM/sonic-and-mario-kiss.gif"]] # Turn this into JSON file
 
 def admin_only(f):
     @wraps(f)
@@ -31,19 +31,22 @@ def render(temp=None, **kwargs):
     
     try:
         if session["beta"]:
-            return render_template("cosmic/" + temp, **kwargs)
+            return render_template("pc/" + temp, **kwargs)
     except KeyError:
         pass
     except jinja2.exceptions.TemplateNotFound:
-        return render_template("pc/" + temp, **kwargs)
+        return render_template("cosmic/" + temp, **kwargs)
 
     try:
         if any(phone in agent.lower() for phone in phones):
             return render_template("ph/" + temp, **kwargs)
         else:
-            return render_template("pc/" + temp, **kwargs)
+            return render_template("cosmic/" + temp, **kwargs)
     except jinja2.exceptions.TemplateNotFound:
-        abort(404)
+        try:
+            return render_template("pc/" + temp, **kwargs)
+        except jinja2.exceptions.TemplateNotFound:
+            abort(404)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -103,7 +106,7 @@ def login():
             session["type"] = userInfo[3]
         else:
             return render("login.html", dumbname=False, dumbpass=True, adFoot=randomAdFoot)
-            
+
     return redirect(url_for("index"))
 
 @app.route("/register", methods=["GET", "POST"])
@@ -252,13 +255,13 @@ def thread(board, thread):
     print(session["flashCommentHeader"])
 
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
-    
+
     boards = cursor.execute("SELECT * FROM boards WHERE board_id = ?", (board,)).fetchone()
     threads = cursor.execute("SELECT * FROM threads WHERE thread_id = ?", (thread,)).fetchone()
     posts = cursor.execute("SELECT * FROM posts WHERE thread_id = ?", (thread,)).fetchall()
     users = cursor.execute("SELECT * FROM users").fetchall()
 
-    if not threads:
+    if not cursor.execute("SELECT * FROM threads WHERE board_id = ? and thread_id = ?", (board, thread,)).fetchone():
         abort(404)
 
     return render("thread.html", thread=threads, board=boards, post=posts, users=users, threadPostFailed=session["threadPostFailed"][0], flashCommentHeader=session["flashCommentHeader"][0], adFoot=randomAdFoot)
@@ -312,10 +315,15 @@ def user_list():
 
 @app.route("/random")
 def randomBoard():
-    boardID = cursor.execute("SELECT MAX(board_id) FROM `boards`").fetchone()[0]
-    if not boardID: return abort(404)
-    randomBoardID = random.randint(0, boardID)
-    return redirect(url_for("board", board=randomBoardID))
+    maxPostID = cursor.execute("SELECT MAX(msg_id) FROM `posts`").fetchone()[0]
+
+    same = True
+    while same:
+        postID = cursor.execute("SELECT * FROM `posts` WHERE msg_id = ?", (random.randint(0, maxPostID),)).fetchone()
+        if f"{postID[2]}{postID[3]}" != f"{request.referrer[-1]}{request.referrer[-3]}":
+            break
+
+    return redirect(url_for("thread", board=postID[2], thread=postID[3]))
 
 @app.route("/test", methods=["GET", "POST"])
 def test():

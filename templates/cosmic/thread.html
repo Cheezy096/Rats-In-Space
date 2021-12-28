@@ -25,14 +25,22 @@
 
     {% set count = namespace(value=0) %}
 	{% for x in post %}
+        {% set id = namespace(value=x[5]) %}
+
         {% if x[2] == board[2] %}
             <table style="width:100%; table-layout: fixed;">
                 <a name="{{x[1]}}"></a>
                 <tr>
+                    {% if not x[6] or x[6] == "Anon" %}
+                        {% set id = namespace(value=0) %}
+                    {% endif %}
+
+                
+
                 {% if flashCommentHeader == x[1] %}
-                    <th style="font-weight:normal; background-color: rgb(0, 0, 190) !important; color: white !important;"><b>User:</b> Anon <a href="/p/{{x[1]}}" style="color: aqua;">({{x[1]}})</a><br><b>Date:</b> {{x[4]}}</th>
+                    <th style="font-weight:normal; background-color: rgb(57, 57, 153) !important; color: white !important;"><b>User:</b> {{x[6]}} <a href="/p/{{x[1]}}" style="color: aqua;">({{x[1]}})</a><br><b>Date:</b> {{x[4]}}</th>
                 {% else %}
-                    <th style="font-weight:normal;"><b>User:</b> Anon <a href="/p/{{x[1]}}">({{x[1]}})</a><br><b>Date:</b> {{x[4]}}</th>
+                    <th style="font-weight:normal;"><b>Post ID:</b> <a href="/p/{{x[1]}}">({{x[1]}})</a><br><b>User:</b> {{x[6]}} ({{id.value}})<br><b>Date:</b> {{x[4]}} </th>
                 {% endif %} 
                 
                 </tr>

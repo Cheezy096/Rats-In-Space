@@ -160,3 +160,10 @@ th {
   border-top-width: 1.5px;
   border-left-width: 1.5px;
 }
+
+.line {
+  margin-left: 5%;
+  width: 90%;
+  height: 1.5px;
+  background-color:rgb(61, 61, 61);
+}

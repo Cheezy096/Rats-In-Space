@@ -3,11 +3,11 @@
 
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/static/main.css">
+        <link rel="stylesheet" href="/static/css/main.css">
     </head>
 
     <script>
-        function openCity(evt, cityName) {
+        function openTab(evt, cityName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
@@ -41,10 +41,9 @@
                 {% if session["username"] %}
                     <p> Welcome, <b>{{session["username"]}}</b><br><a href="/logout" class="brightlink">Logout</a></p>
                 {% else %}
-                    <p>Woah ass ahoy<br><a href="/login" class="brightlink">Log in</a> or <a href="/login" class="brightlink">Register</a></p>
+                    <p>Woah ass ahoy<br><a href="/login" class="brightlink">Log in</a> or <a href="/register" class="brightlink">Register</a></p>
                         
-                {% endif %}
-
+                {% endif %}                
             </div>
 
 
@@ -53,13 +52,15 @@
                     <button id="homeButton" class="tablinks" onclick="location.href='/'">Main</button>
                     <button class="tablinks" onclick="location.href='/users'">All users</button>
                     <button class="tablinks" onclick="location.href='/help'">Help</button>
+                    <button class="tablinks" onclick="location.href='/random'">Random</button>
                 </div>
                 <br>
             {% else %}
                 <div class="tab">
-                    <button id="homeButton" class="tablinks" onclick="openCity(event, 't1')">Main</button>
-                    <button class="tablinks" onclick="openCity(event, 't2')">All users</button>
-                    <button class="tablinks" onclick="openCity(event, 't3')">Help</button>
+                    <button id="homeButton" class="tablinks" onclick="openTab(event, 't1')">Main</button>
+                    <button class="tablinks" onclick="openTab(event, 't2')">All users</button>
+                    <button class="tablinks" onclick="openTab(event, 't3')">Help</button>
+                    <button class="tablinks" onclick="location.href='/random'">Random</button>
                 </div>
             {% endif %}
 
@@ -112,12 +113,18 @@
 
                         <p style="margin: 0;">Q: How do i login?<br>A: You do not.</p>
                         <br>
-                        <p style="margin: 0;">Q: What timezone is used?<br>A: GMT (London time)</p>
                         <br>
-                        <p style="margin: 0;">Q: I know the ID to a message but cant remember what board or thread it was in!<br>A: You can use "/p/&lt;message_id&gt;" to jump to the message. The message will also be highlighted for convienence.</p>
+                        <p style="margin: 0;">Q: What timezone is used?<br>A: GMT (London time). This is all done server-side, your locale time is never used.</p>
                         <br>
-                        <p style="margin: 0;">Q: Does the plaintext password option actually store the password as plain text?<br>A: Yes it does, I would advise using it though if you really care.</p>
-
+                        <br>
+                        <p style="margin: 0;">Q: I know the ID to a message but I can't remember what board or thread it was in!<br>A: You can use "/p/&lt;message_id&gt;" to jump to the message. The message will also be highlighted for convienence.</p>
+                        <br>
+                        <br>
+                        <p style="margin: 0;">Q: Does the plaintext password option actually store the password as plain text?<br>A: Yes it does, I would advise against using it though if you really care.</p>
+                        <br>
+                        <br>
+                        <p style="margin: 0;">Q: I have found a bug but I don't know where or how to report it!<br>A: Send me an email by clicking <a href="mailto:jakeratman@airmail.cc">here</a>. Please try to provide an in-depth step by step process so I can reproduce the bug more easily and quickly.</p>
+                        <br>
                     </div>
                     {% endif %}
 
@@ -128,7 +135,10 @@
                 <div>© 2005 [Rats In Space] BETA!</div>
                 <div>very hq website.</div>
                 <br>
-                <a href="/beta">Take me back to the old page!</a>
+                <div>{{adFoot[0]}} <a href="{{adFoot[2]}}">{{adFoot[1]}}</a></div>
+                <br>
+                <div><a href="mailto:jakeratman@airmail.cc">Report a bug.</a></div>
+
             </div>
         </div>
 

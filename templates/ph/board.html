@@ -1,81 +1,56 @@
-{% extends "ph/base.html" %}
-
-{% block title %}
-
-<title>/b/ - {{board[0]}} - [Rats In Space]</title>
-
-{% endblock %}
+{% extends "cosmic/base.html" %}
 
 {% block content %}
 
-<div id="output">
+    <h3><a href="/">Board List</a> >> {{board[0]}}</h3>
 
-	<div class="output-primary ie-paintfix" style="text-align:center">
+    <br>
+    <form action="/b/{{board[2]}}/post" method="POST" style="width: 60%; margin-left: 20%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
 
+        <h3>Create a thread!</h3>
 
-	</div></div>
-
-
-			<div id="user" class="output-primary">
-
-	<div class="thread section">
-	<h2 class="section-head" style="font-size: 35px !important;"><a href="/b/{{board[2]}}" >{{board[0]}}</a>: {{board[1]}}</h2>
-
-	<div>
-	<input type="hidden" name="ref" value="http://forum.deviantart.com/devart/help/610231/"/>
-	<input type="hidden" name="threadid" value="610231"/>
-	</div>
-
-
-	{% set count = namespace(value=0) %}
-
-	{% for x in thread %}
-
-		<div class="item">
-			<div class="item-head float-holder" style="font-size: 30px !important;">
-				<strong><a href="/b/{{board[2]}}/{{x[1]}}">Jump to thread</a></strong><br/>
-			</div>
-			<div class="trailing item-body" style="font-size: 30px !important;">
-				{{x[0]}}
-			</div>
-		</div>
-
-		{% set count.value = count.value + 1 %}
+        <textarea cols=" id="body" name="board_content" rows="5" style="width: 80%;"></textarea>
+        <br>
+        <br>
+        <input id="generalButton" type="submit" value="Create thread"/>
+        {% if boardPostFailed %}
+            <p style="color: rgb(109, 0, 0); font-size: 15px;">{{boardPostFailed}}</p>
+        {% else %}
+            <br>
+            <br>
+        {% endif %}
 
 
-	{% endfor %}
+    </form>
+    <br>
+    <br>
 
-	{% if count.value == 0 %}
-		<br>
-		<div class="item">
-			<div class="item-head float-holder">
-				<a id="c13167555"></a>
-				<strong>No threads can be found.</strong><br/>
-			</div>
-			<div class="trailing item-body">
-				<br>
-			</div>
-		</div>
+    <table style="width:100%;"">
+        <tr>
+            <th>Name</th>
+            <th width="4%">ID</th>
+        </tr>
+        {% set count = namespace(value=0) %}
 
-	{% endif %}
+        {% for x in thread %}
+            {% set count.value = count.value + 1 %}
 
+        <tr>
+            <td><a href="/b/{{board[2]}}/{{x[1]}}">{{x[0]}}</a></td>
+            <td>{{x[1]}}</td>
+        </tr>
+        {% endfor %}
 
-	<div style="padding-top:4px;text-align:center;">
-		<form action="/b/{{board[2]}}/post" method="POST">
-				<br>
-				<div class="output-primary" style="text-align:center"><div style="background:#9AA29A;width:728px;margin:auto;padding:4px !important;margin:-7px auto 20px auto !important;text-align:left">
+        {% if count.value == 0 %}
 
-				<textarea cols=" id="body" name="board_content" rows="5" style="width: 99.1%; font-size: 35px;"></textarea>
-				<br>
-				<br>
-				<input type="submit" value="Create thread." style="font-size: 35px !important; border-style:solid; border-color: #494949; background-color: #585f5b; color: white; width: 100%; height: 60px;"/>
-				</div></div>
-		</form>
-	</div>
+        <tr>
+            <td colspan="3"><strong>No active threads.</strong></td>
+        </tr>
 
-	</div>
-	</form>
+        {% endif %}
 
-	</div>
+</table>
+<br>
+
 
 {% endblock %}
