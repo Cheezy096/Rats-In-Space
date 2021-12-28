@@ -136,3 +136,27 @@ td, th {
 th {
     background-color:rgb(153, 153, 153);
 }
+
+#generalButton {
+  background-color: #c0c0c0;
+  width: 81%;
+  height: 30px;
+  border-style: outset;
+  border-top-color: white;
+  border-left-color: white;
+  border-right-color: black;
+  border-bottom-color: black;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+#generalButton:active {
+  background-color: #969696;
+  border-style: inset;
+  border-top-color: black;
+  border-left-color: black;
+  border-right-color: rgb(219, 219, 219);
+  border-bottom-color: rgb(219, 219, 219);
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}

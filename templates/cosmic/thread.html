@@ -4,6 +4,20 @@
 
     <h3><a href="/">Board List</a> >> <a href="/b/{{board[2]}}">{{board[0]}}</a> >> {{thread[0]}}</h3>
 
+    <br>
+    <form action="/b/{{board[2]}}/{{thread[1]}}/post" method="POST" style="width: 60%; margin-left: 20%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
+        <h3>Leave a comment!</h3>
+
+        <textarea cols=" id="body" name="thread_content" rows="5" style="width: 80%;"></textarea>
+        <br>
+        <br>
+        <input id="generalButton" type="submit" value="Post comment"/>
+        <br>
+        <br>
+    </form>
+    <br>
+    <br>
+
     {% set count = namespace(value=0) %}
 	{% for x in post %}
         {% if x[2] == board[2] %}
