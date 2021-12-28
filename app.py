@@ -96,13 +96,14 @@ def login():
             return render("login.html", dumbname=True, dumbpass=False, adFoot=randomAdFoot)
 
         hash_check = werkzeug.security.check_password_hash(userInfo[1], request.form["password"])
-        if not hash_check or userInfo[1] != request.form["password"]:
-            return render("login.html", dumbname=False, dumbpass=True, adFoot=randomAdFoot)
-        else:
+        
+        if hash_check or userInfo[1] == request.form["password"]:
             session["username"] = userInfo[0]
             session["id"] = userInfo[2]
             session["type"] = userInfo[3]
-
+        else:
+            return render("login.html", dumbname=False, dumbpass=True, adFoot=randomAdFoot)
+            
     return redirect(url_for("index"))
 
 @app.route("/register", methods=["GET", "POST"])
