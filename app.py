@@ -96,12 +96,12 @@ def login():
             return render("login.html", dumbname=True, dumbpass=False, adFoot=randomAdFoot)
 
         hash_check = werkzeug.security.check_password_hash(userInfo[1], request.form["password"])
-        if not hash_check:
+        if not hash_check or userInfo[1] != request.form["password"]:
             return render("login.html", dumbname=False, dumbpass=True, adFoot=randomAdFoot)
-
-        session["username"] = userInfo[0]
-        session["id"] = userInfo[2]
-        session["type"] = userInfo[3]
+        else:
+            session["username"] = userInfo[0]
+            session["id"] = userInfo[2]
+            session["type"] = userInfo[3]
 
     return redirect(url_for("index"))
 
@@ -224,7 +224,7 @@ def new_thread_comment(board, thread):
         else:
             postsID = -1
 
-    cursor.execute("INSERT INTO posts(content, msg_id, thread_id, board_id) VALUES(?,?,?,?)", (request.form["thread_content"], postsID + 1, thread, board))
+    cursor.execute("INSERT INTO posts(content, msg_id, thread_id, board_id, date) VALUES(?,?,?,?,?)", (request.form["thread_content"], postsID + 1, thread, board, datetime.datetime.now().strftime("%b %d, %Y, %I:%M:%S %p"),))
     sql.commit()
 
     return redirect(url_for("thread", board=board, thread=thread))
