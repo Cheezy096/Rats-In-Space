@@ -97,14 +97,26 @@
 
                             {% endfor %}
 
+                            {% if count.value == 0 %}
+
+                                <tr>
+                                    <td colspan="4"><strong>No users registered.</strong></td>
+                                </tr>
+                            {% endif %}
+
                         </table>
                     </div>
 
                     <div id="t3" class="tabcontent">
                         <h3>Help</h3>
+
                         <p style="margin: 0;">Q: How do i login?<br>A: You do not.</p>
                         <br>
-                        <p style="margin: 0;">Q: How do i login?<br>A: You do not.</p>
+                        <p style="margin: 0;">Q: What timezone is used?<br>A: GMT (London time)</p>
+                        <br>
+                        <p style="margin: 0;">Q: I know the ID to a message but cant remember what board or thread it was in!<br>A: You can use "/p/&lt;message_id&gt;" to jump to the message. The message will also be highlighted for convienence.</p>
+                        <br>
+                        <p style="margin: 0;">Q: Does the plaintext password option actually store the password as plain text?<br>A: Yes it does, I would advise using it though if you really care.</p>
 
                     </div>
                     {% endif %}
