@@ -7,21 +7,30 @@
 <table style="width:100%;"">
     <tr>
         <th>Name</th>
-        <th>Info</th>
+        <th>Creation Date</th>
+        <th width="4%">Type</th>
         <th width="4%">ID</th>
     </tr>
     {% set count = namespace(value=0) %}
-
+                    
     {% for x in users %}
         {% set count.value = count.value + 1 %}
 
     <tr>
         <td><a href="/b/{{x[2]}}">{{x[0]}}</a></td>
-        <td>{{x[1]}}</td>
+        <td>{{x[4]}}</td>
+        <td>{{x[3]}}</td>
         <td>{{x[2]}}</td>
     </tr>
 
     {% endfor %}
+
+    {% if count.value == 0 %}
+
+        <tr>
+            <td colspan="4"><strong>No users registered.</strong></td>
+        </tr>
+    {% endif %}
 
 </table>
 
