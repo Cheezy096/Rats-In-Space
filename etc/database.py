@@ -3,7 +3,7 @@ from sqlite3.dbapi2 import Cursor
 
 def prepare():
     cursor.execute("CREATE TABLE IF NOT EXISTS 'boards' ('name' TEXT NOT NULL, 'info' TEXT NOT NULL, 'board_id' INTEGER NOT NULL)")
-    cursor.execute("CREATE TABLE IF NOT EXISTS 'posts' ('content' TEXT NOT NULL, 'msg_id' INTEGER NOT NULL, 'board_id' INTEGER NOT NULL, 'thread_id' INTEGER NOT NULL, `date` TEXT NOT NULL)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS 'posts' ('content' TEXT NOT NULL, 'msg_id' INTEGER NOT NULL, 'board_id' INTEGER NOT NULL, 'thread_id' INTEGER NOT NULL, `date` TEXT NOT NULL, `userid` INTERGER, `username` TEXT)")
     cursor.execute("CREATE TABLE IF NOT EXISTS 'threads' ('info' TEXT NOT NULL, 'thread_id' INTEGER NOT NULL, 'board_id' INTEGER NOT NULL)")
     cursor.execute("CREATE TABLE IF NOT EXISTS `users` ('username'	TEXT NOT NULL, 'password' TEXT NOT NULL, 'id' INTEGER NOT NULL, 'type' INTEGER NOT NULL, `date` TEXT NOT NULL);")
     print("[DATABASE-DEBUG] Created TABLES")
