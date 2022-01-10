@@ -48,11 +48,10 @@ def render(temp=None, **kwargs):
         except jinja2.exceptions.TemplateNotFound:
             abort(404)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def index():
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
-    if request.method == "POST":
-        print(request.form["submit"])
+
     try:
         boards = cursor.execute("SELECT * FROM `boards`").fetchall()
         users = cursor.execute("SELECT * FROM users").fetchall()
@@ -157,13 +156,14 @@ def register():
 @admin_only
 def delete_board(board):
     userCheck = cursor.execute("SELECT `type` FROM `users` WHERE username = ?", (session["username"],)).fetchone()
-    if not userCheck: return "bad"
+    if not userCheck: 
+        return abort(401)
 
-    print(userCheck[0])
     if userCheck[0] == 1:
         cursor.execute("DELETE FROM `boards` WHERE board_id = ?", (board,)).fetchone()
         cursor.execute("DELETE FROM `threads` WHERE board_id = ?", (board,)).fetchone()
         cursor.execute("DELETE FROM `posts` WHERE board_id = ?", (board,)).fetchone()
+    
     sql.commit()
 
     return redirect(url_for("index"))
@@ -207,12 +207,10 @@ def goto_post(post):
 def board(board):
 
     try:
-        print(session["boardPostFailed"])
         if session["boardPostFailed"][1] != 0:
             session["boardPostFailed"] = [False, 0]
 
         if session["boardPostFailed"][0] != False:
-            print("nigger")
             session["boardPostFailed"] = [session["boardPostFailed"][0], 1]
 
     except KeyError:
@@ -252,8 +250,6 @@ def thread(board, thread):
     except KeyError:
         session["flashCommentHeader"] = ["False", 0]
 
-    print(session["flashCommentHeader"])
-
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
 
     boards = cursor.execute("SELECT * FROM boards WHERE board_id = ?", (board,)).fetchone()
@@ -275,14 +271,25 @@ def new_thread_comment(board, thread):
         return redirect(url_for("thread", board=board, thread=thread))
 
     postsID = cursor.execute("SELECT MAX(msg_id) FROM `posts`").fetchone()[0]
-    if not postsID:
-        if postsID == 0:
-            pass
-        else:
-            postsID = -1
 
-    cursor.execute("INSERT INTO posts(content, msg_id, thread_id, board_id, date) VALUES(?,?,?,?,?)", (request.form["thread_content"], postsID + 1, thread, board, datetime.datetime.now().strftime("%b %d, %Y, %I:%M:%S %p"),))
-    sql.commit()
+    doesBoardExist = cursor.execute("SELECT `board_id` FROM `threads` WHERE `board_id` = ?", (board,)).fetchone()
+    doesThreadExist = cursor.execute("SELECT `thread_id` FROM `threads` WHERE `thread_id` = ?", (thread,)).fetchone()
+    if doesBoardExist and doesThreadExist:
+        if not postsID:
+            if postsID == 0:
+                pass
+            else:
+                postsID = -1
+
+        try:
+            username = session["username"]
+            userid = session["id"]
+        except KeyError:
+            username = "Anon"
+            userid = 0
+
+        cursor.execute("INSERT INTO posts(content, msg_id, thread_id, board_id, date, userid, username) VALUES(?,?,?,?,?,?,?)", (request.form["thread_content"], postsID + 1, thread, board, datetime.datetime.now().strftime("%b %d, %Y, %I:%M:%S %p"), userid, username,))
+        sql.commit()
 
     return redirect(url_for("thread", board=board, thread=thread))
 
@@ -294,15 +301,19 @@ def new_thread(board):
         session["boardPostFailed"] = ["Cannot create a board with an empty name!", 0]
         return redirect(url_for("board", board=board))
 
-    threadID = cursor.execute("SELECT MAX(thread_id) FROM `threads`").fetchone()[0]
-    if not threadID:
-        if threadID == 0:
-            pass
-        else:
-            threadID = -1
+    maxThreadID = cursor.execute("SELECT MAX(thread_id) FROM `threads`").fetchone()[0]
+    
+    doesBoardExist = cursor.execute("SELECT `board_id` FROM `boards` WHERE `board_id` = ?", (board,)).fetchone()
+    if doesBoardExist:
+        if not maxThreadID:
+            if maxThreadID == 0:
+                pass
+            else:
+                maxThreadID = -1
 
-    cursor.execute("INSERT INTO threads(info, thread_id, board_id) VALUES(?,?,?)", (request.form["board_content"], threadID + 1, board,))
-    sql.commit()
+
+        cursor.execute("INSERT INTO threads(info, thread_id, board_id) VALUES(?,?,?)", (request.form["board_content"], maxThreadID + 1, board,))
+        sql.commit()
 
     return redirect(url_for("board", board=board))
 
