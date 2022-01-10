@@ -28,34 +28,34 @@ def render(temp=None, **kwargs):
 
     agent = request.headers.get('User-Agent')
     phones = ["iphone", "android", "blackberry"]
-    
+    randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
+    news = cursor.execute("SELECT * FROM news").fetchall()
+
     try:
         if session["beta"]:
-            return render_template("pc/" + temp, **kwargs)
+            return render_template("pc/" + temp, news=news, session=session, adFoot=randomAdFoot, **kwargs)
     except KeyError:
         pass
     except jinja2.exceptions.TemplateNotFound:
-        return render_template("cosmic/" + temp, **kwargs)
+        return render_template("cosmic/" + temp, news=news, session=session, adFoot=randomAdFoot, **kwargs)
 
     try:
         if any(phone in agent.lower() for phone in phones):
-            return render_template("ph/" + temp, **kwargs)
+            return render_template("ph/" + temp, news=news, session=session, adFoot=randomAdFoot, **kwargs)
         else:
-            return render_template("cosmic/" + temp, **kwargs)
+            return render_template("cosmic/" + temp, news=news, session=session, adFoot=randomAdFoot, **kwargs)
     except jinja2.exceptions.TemplateNotFound:
         try:
-            return render_template("pc/" + temp, **kwargs)
+            return render_template("pc/" + temp, news=news, session=session, adFoot=randomAdFoot, **kwargs)
         except jinja2.exceptions.TemplateNotFound:
             abort(404)
 
 @app.route("/")
 def index():
-    randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
-
     try:
         boards = cursor.execute("SELECT * FROM `boards`").fetchall()
         users = cursor.execute("SELECT * FROM users").fetchall()
-        return render("index.html", boards=boards, users=users, adFoot=randomAdFoot, session=session)
+        return render("index.html", boards=boards, users=users)
     except sqlite3.ProgrammingError:
         return "this is not working"
 
@@ -82,8 +82,6 @@ def logout():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
-
     try:
         if session["username"]:
             return redirect(url_for("index"))
@@ -91,11 +89,11 @@ def login():
         pass
 
     if request.method == "GET":
-        return render("login.html", dumbname=False, dumbpass=False, adFoot=randomAdFoot)
+        return render("login.html", dumbname=False, dumbpass=False)
     else:
         userInfo = cursor.execute("SELECT * from `users` WHERE username = ?", (request.form["username"],)).fetchone()
         if not userInfo: 
-            return render("login.html", dumbname=True, dumbpass=False, adFoot=randomAdFoot)
+            return render("login.html", dumbname=True, dumbpass=False)
 
         hash_check = werkzeug.security.check_password_hash(userInfo[1], request.form["password"])
         
@@ -104,7 +102,7 @@ def login():
             session["id"] = userInfo[2]
             session["type"] = userInfo[3]
         else:
-            return render("login.html", dumbname=False, dumbpass=True, adFoot=randomAdFoot)
+            return render("login.html", dumbname=False, dumbpass=True)
 
     return redirect(url_for("index"))
 
@@ -119,15 +117,15 @@ def register():
         pass
 
     if request.method == "GET":
-        return render("register.html", dumbname=False, dumbpass=False, adFoot=randomAdFoot)
+        return render("register.html", dumbname=False, dumbpass=False)
     else:
 
         userInfo = cursor.execute("SELECT * from `users` WHERE username = ?", (request.form["username"],)).fetchone()
         if userInfo: 
-            return render("register.html", dumbname=True, dumbpass=False, adFoot=randomAdFoot)
+            return render("register.html", dumbname=True, dumbpass=False)
         
         if len(request.form["password"].split()) == 0:
-            return render("register.html", dumbname=False, dumbpass=True, adFoot=randomAdFoot)
+            return render("register.html", dumbname=False, dumbpass=True)
 
 
         userID = cursor.execute("SELECT MAX(id) FROM `users`").fetchone()[0]
@@ -174,7 +172,7 @@ def new_board():
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
 
     if request.method == "GET":
-        return render("newboard.html", adFoot=randomAdFoot)
+        return render("newboard.html")
     else:
         boardID = cursor.execute("SELECT MAX(board_id) FROM `boards`").fetchone()[0]
         if not boardID:
@@ -190,7 +188,7 @@ def new_board():
 def help():
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
 
-    return render("help.html", adFoot=randomAdFoot)
+    return render("help.html")
 
 @app.route("/p/<post>")
 def goto_post(post):
@@ -225,7 +223,7 @@ def board(board):
     if not boards:
         abort(404)
 
-    return render("board.html", thread=threads, board=boards, users=users, adFoot=randomAdFoot, boardPostFailed=session["boardPostFailed"][0])
+    return render("board.html", thread=threads, board=boards, users=users, boardPostFailed=session["boardPostFailed"][0])
 
 @app.route("/b/<board>/<thread>")
 def thread(board, thread):
@@ -260,7 +258,7 @@ def thread(board, thread):
     if not cursor.execute("SELECT * FROM threads WHERE board_id = ? and thread_id = ?", (board, thread,)).fetchone():
         abort(404)
 
-    return render("thread.html", thread=threads, board=boards, post=posts, users=users, threadPostFailed=session["threadPostFailed"][0], flashCommentHeader=session["flashCommentHeader"][0], adFoot=randomAdFoot)
+    return render("thread.html", thread=threads, board=boards, post=posts, users=users, threadPostFailed=session["threadPostFailed"][0], flashCommentHeader=session["flashCommentHeader"][0])
 
 @app.route("/b/<board>/<thread>/post", methods=["GET", "POST"])
 def new_thread_comment(board, thread):
@@ -293,6 +291,18 @@ def new_thread_comment(board, thread):
 
     return redirect(url_for("thread", board=board, thread=thread))
 
+@app.route("/newnews", methods=["GET", "POST"])
+def new_news():
+    randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
+
+    if request.method == "GET":
+        return render("newnews.html", dumbname=False, dumbpass=False)
+    else:
+        cursor.execute("INSERT INTO news(subject, content, date) VALUES(?,?,?)", (request.form["news_subject"], request.form["news_content"], datetime.datetime.now().strftime("%d %B %Y, %H:%M:%S (%I:%M:%S%p)"),))
+        sql.commit()
+        return redirect(url_for("index"))
+
+
 @app.route("/b/<board>/post", methods=["GET", "POST"])
 def new_thread(board):
     session["boardPostFailed"] = [False, 0]
@@ -322,7 +332,7 @@ def user_list():
     randomAdFoot = builtins.randomAdFoot[random.randint(0, len(builtins.randomAdFoot) - 1)]
     users = cursor.execute("SELECT * FROM users").fetchall()
 
-    return render("userlist.html", users=users, adFoot=randomAdFoot)
+    return render("userlist.html", users=users)
 
 @app.route("/random")
 def randomBoard():
