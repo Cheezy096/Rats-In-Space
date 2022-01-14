@@ -25,6 +25,11 @@
         <input id="generalButton" type="submit" value="Register"/>
 
         <br>
+        {% if dumbpass %}
+            <p style="color: rgb(131, 0, 0);">Can't set an empty password!</p>
+        {% elif dumbname %}
+            <p style="color: rgb(131, 0, 0);">User already exists!</p>
+        {% endif %}
         <br>
 
     </form>

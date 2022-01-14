@@ -21,6 +21,11 @@
         <input id="generalButton" type="submit" value="Login"/>
 
         <br>
+        {% if dumbpass %}
+            <p style="color: rgb(131, 0, 0);">Incorrect password!</p>
+        {% elif dumbname %}
+            <p style="color: rgb(131, 0, 0);">User doesn't exist!</p>
+        {% endif %}
         <br>
 
     </form>

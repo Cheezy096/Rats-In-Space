@@ -1,5 +1,5 @@
 * {
-    font-family: 'Times New Roman', Times, serif
+    font-family: 'Times New Roman', Times, serif;
 }
 
 body {
@@ -38,6 +38,16 @@ a:hover {
     background: linear-gradient(to right, #ccffff -81%, #000099 123%);
     text-align: center; 
     color: white;
+}
+
+.headertitle {
+  color: white;
+  text-decoration: none;
+}
+
+.headertitle:hover {
+  color: rgb(120, 232, 252);
+  text-decoration: none;
 }
 
 .tab2 {

@@ -1,0 +1,30 @@
+{% extends "cosmic/base.html" %}
+
+{% block content %}
+
+    <h3><a href="/">Board List</a> >> New Board</h3>
+
+    <br>
+    <form action="/newboard" method="POST" style="width: 60%; margin-left: 20%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
+        <h3>Create a new board!</h3>
+
+        <textarea type="text" cols=" id="body" name="board_name" rows="1" placeholder="Name..." style="height: 20px; width: 80%;"></textarea>
+
+        <br>
+        <br>
+
+        <textarea type="text" cols=" id="body" name="board_info" rows="1" placeholder="Description..." style="height: 20px; width: 80%;"></textarea>
+
+        <br>
+        <br>
+
+        <input id="generalButton" type="submit" value="Create"/>
+
+        <br>
+        <br>
+
+    </form>
+    <br>
+    <br>
+
+{% endblock %}
