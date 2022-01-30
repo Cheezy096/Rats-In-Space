@@ -4,6 +4,7 @@ from etc.utils import *
 board_view = Blueprint('board_view', __name__)
 
 @board_view.route("/b/<board>/")
+@userchk
 def board(board):
 
     try:
@@ -16,16 +17,21 @@ def board(board):
     except KeyError:
         session["boardPostFailed"] = [False, 0]
 
-
+    try:
+        userAnon = cursor.execute("SELECT `anon` FROM `users` WHERE id = ?", (session["id"],)).fetchone()[0]
+    except KeyError:
+        userAnon = None
+        
     boards = cursor.execute("SELECT * FROM boards WHERE board_id = ?", (board,)).fetchone()
     threads = cursor.execute("SELECT * FROM threads WHERE board_id = ?", (board,)).fetchall()
 
     if not boards:
         abort(404)
 
-    return render("board.html", thread=threads, board=boards,  boardPostFailed=session["boardPostFailed"][0])
+    return render("board.html", thread=threads, board=boards, anon=userAnon, boardPostFailed=session["boardPostFailed"][0])
 
 @board_view.route("/delboard/<board>/", methods=["GET", "POST"])
+@userchk
 @admin_only
 def delete_board(board):
     userCheck = cursor.execute("SELECT `type` FROM `users` WHERE username = ?", (session["username"],)).fetchone()
@@ -42,6 +48,7 @@ def delete_board(board):
     return redirect(url_for("index"))
 
 @board_view.route("/newboard", methods=["GET", "POST"])
+@userchk
 @admin_only
 def new_board():
     if request.method == "GET":
@@ -58,6 +65,7 @@ def new_board():
     return redirect(url_for("board_view.board", board=boardID + 1))
 
 @board_view.route("/random")
+@userchk
 def randomBoard():
     maxPostID = cursor.execute("SELECT MAX(msg_id) FROM `posts`").fetchone()[0]
 

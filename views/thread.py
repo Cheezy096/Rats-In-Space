@@ -5,6 +5,7 @@ from etc.utils import *
 thread_view = Blueprint('thread_view', __name__)
 
 @thread_view.route("/b/<board>/post", methods=["GET", "POST"])
+@userchk
 def new_thread(board):
     session["boardPostFailed"] = [False, 0]
     
@@ -22,13 +23,24 @@ def new_thread(board):
             else:
                 maxThreadID = -1
 
+        if not request.form.get("nouser"):
+            try:
+                username = session["username"]
+                userid = session["id"]
+            except KeyError:
+                username = "Anon"
+                userid = None
+        else:
+            username = "Anon"
+            userid = None
 
-        cursor.execute("INSERT INTO threads(info, thread_id, board_id) VALUES(?,?,?)", (request.form["board_content"], maxThreadID + 1, board,))
+        cursor.execute("INSERT INTO threads(info, thread_id, board_id, date, userid, username) VALUES(?,?,?,?,?,?)", (request.form["board_content"], maxThreadID + 1, board, datetime.datetime.now().strftime("%b %d, %Y, %I:%M:%S %p"), userid, username,))
         sql.commit()
 
     return redirect(url_for("board_view.board", board=board))
 
 @thread_view.route("/b/<board>/<thread>")
+@userchk
 def thread(board, thread):
 
     try:
@@ -62,6 +74,7 @@ def thread(board, thread):
     return render("thread.html", thread=threads, board=boards, post=posts, threadPostFailed=session["threadPostFailed"][0], flashCommentHeader=session["flashCommentHeader"][0])
 
 @thread_view.route("/b/<board>/<thread>/post", methods=["GET", "POST"])
+@userchk
 def new_thread_comment(board, thread):
     session["threadPostFailed"] = [False, 0]
     
@@ -80,10 +93,14 @@ def new_thread_comment(board, thread):
             else:
                 postsID = -1
 
-        try:
-            username = session["username"]
-            userid = session["id"]
-        except KeyError:
+        if not request.form.get("nouser"):
+            try:
+                username = session["username"]
+                userid = session["id"]
+            except KeyError:
+                username = "Anon"
+                userid = None
+        else:
             username = "Anon"
             userid = None
 

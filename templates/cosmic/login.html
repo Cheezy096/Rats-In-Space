@@ -1,5 +1,10 @@
 {% extends "cosmic/base.html" %}
 
+{% block title %}
+    <title>Login - [RATS IN SPACE]</title>
+{% endblock %}
+
+
 {% block content %}
 
     <h3><a href="/">Board List</a> >> Login</h3>
@@ -21,12 +26,12 @@
         <input id="generalButton" type="submit" value="Login"/>
 
         <br>
-        {% if dumbpass %}
-            <p style="color: rgb(131, 0, 0);">Incorrect password!</p>
-        {% elif dumbname %}
-            <p style="color: rgb(131, 0, 0);">User doesn't exist!</p>
+        {% if errorMessage %}
+            <p style="color: rgb(131, 0, 0);">{{errorMessage}}</p>
+        {% else %}
+            <br>
         {% endif %}
-        <br>
+
 
     </form>
     <br>

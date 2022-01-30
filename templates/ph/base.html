@@ -2,12 +2,18 @@
 <html>
 
     <head>
+        <meta content="[RATS IN SPACE]" property="og:title" />
+        <meta content="The official home for rats! No refunds." property="og:description" />
+        <meta content="http://jake.chiyo.org/" property="og:url" />
+        <meta content="jake.chiyo.org/static/images/JPG/rat.jpg" property="og:image" />
+        <meta content="#721010" data-react-helmet="true" name="theme-color" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/static/main.css">
+        <link rel="stylesheet" href="/static/css/main_mobile.css">
+        <link rel="icon" href="/static/images/JPG/rat.jpg">
     </head>
 
     <script>
-        function openCity(evt, cityName) {
+        function openTab(evt, cityName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
@@ -36,14 +42,14 @@
         <div class="main">
 
             <div class="header">
-                <h2 style="font-size: 30px;"><i>[RATS IN SPACE]</i><br><span style="font-size: 25px;">BETA!</span></h2>
+                <h2 style="font-size: 30px;"><i><a href="/" class="headertitle">[RATS IN SPACE]</a></i><br><span style="font-size: 25px;">BETA!</span></h2>
 
                 {% if session["username"] %}
                     <p> Welcome, <b>{{session["username"]}}</b><br><a href="/logout" class="brightlink">Logout</a></p>
                 {% else %}
                     <p>Woah ass ahoy<br><a href="/login" class="brightlink">Log in</a> or <a href="/register" class="brightlink">Register</a></p>
                         
-                {% endif %}                
+                {% endif %}
             </div>
 
 
@@ -57,9 +63,10 @@
                 <br>
             {% else %}
                 <div class="tab">
-                    <button id="homeButton" class="tablinks" onclick="openCity(event, 't1')">Main</button>
-                    <button class="tablinks" onclick="openCity(event, 't2')">All users</button>
-                    <button class="tablinks" onclick="openCity(event, 't3')">Help</button>
+                    <button id="homeButton" class="tablinks" onclick="openTab(event, 't1')">Main</button>
+                    <button class="tablinks" onclick="openTab(event, 't2')">All users</button>
+                    <button class="tablinks" onclick="openTab(event, 't4')">News</button>
+                    <button class="tablinks" onclick="openTab(event, 't3')">Help</button>
                     <button class="tablinks" onclick="location.href='/random'">Random</button>
                 </div>
             {% endif %}
@@ -84,10 +91,10 @@
                                 <th width="4%">Type</th>
                                 <th width="4%">ID</th>
                             </tr>
-                            {% set count = namespace(value=0) %}
+                            {% set userCount = namespace(value=0) %}
                     
                             {% for x in users %}
-                                {% set count.value = count.value + 1 %}
+                                {% set userCount.value = userCount.value + 1 %}
                     
                             <tr>
                                 <td><a href="/b/{{x[2]}}">{{x[0]}}</a></td>
@@ -98,7 +105,7 @@
 
                             {% endfor %}
 
-                            {% if count.value == 0 %}
+                            {% if userCount.value == 0 %}
 
                                 <tr>
                                     <td colspan="4"><strong>No users registered.</strong></td>
@@ -106,6 +113,7 @@
                             {% endif %}
 
                         </table>
+                        <br>
                     </div>
 
                     <div id="t3" class="tabcontent">
@@ -113,27 +121,68 @@
 
                         <p style="margin: 0;">Q: How do i login?<br>A: You do not.</p>
                         <br>
-                        <p style="margin: 0;">Q: What timezone is used?<br>A: GMT (London time)</p>
+                        <br>
+                        <p style="margin: 0;">Q: What timezone is used?<br>A: GMT (London time). This is all done server-side, your locale time is never used.</p>
+                        <br>
                         <br>
                         <p style="margin: 0;">Q: I know the ID to a message but I can't remember what board or thread it was in!<br>A: You can use "/p/&lt;message_id&gt;" to jump to the message. The message will also be highlighted for convienence.</p>
                         <br>
+                        <br>
                         <p style="margin: 0;">Q: Does the plaintext password option actually store the password as plain text?<br>A: Yes it does, I would advise against using it though if you really care.</p>
-
+                        <br>
+                        <br>
+                        <p style="margin: 0;">Q: I have found a bug but I don't know where or how to report it!<br>A: Send me an email by clicking <a href="mailto:jakeratman@airmail.cc">here</a>. Please try to provide an in-depth step by step process so I can reproduce the bug more easily and quickly.</p>
+                        <br>
                     </div>
-                    {% endif %}
+
+                    <div id="t4" class="tabcontent">
+                        <form action="/newnews" method="GET">
+                            <h3>News<br>
+
+                            {% if session["type"] == 1 %} 
+                                <input type="submit" value="Create news piece" style="font-size: 14px; border-style:solid; border-color: #494949; background-color: #585f5b; color: white; width: 90x; height: 25px; margin-top: 0%"/> 
+                            {% endif %} 
+
+                            </h3>
+                        </form>
+
+                        {% set newsCount = namespace(value=0) %}
+                        {% for x in news %}
+                            {% set newsCount.value = newsCount.value + 1 %}
+
+                            <table style="width:100%; table-layout: fixed;">
+                                <a name="{{x[0]}}"></a>
+                                <tr>
+                                    <th style="font-weight:normal; text-align: center;"><span style="font-size: 18px;"><b>{{x[0]}}</b></span><br><br><b>Created at:</b> {{x[2]}}</th>
+                                </tr>
+                
+                                <tr>
+                                    <td style="word-wrap: break-word;">{{x[1]}}</td>
+                                </tr>
+                            </table>
+                            <br>
+
+                        {% endfor %}
+                        
+                        {% if newsCount.value == 0 %}
+                            <tr>
+                                <td colspan="4"><strong>There is NO news!</strong></td>
+                            </tr>
+                        {% endif %}                    
+                    
+                    </div>
+                {% endif %}
 
             </div>
 
             
             <div class="footer">
-                <div>© 2005 [Rats In Space] BETA!</div>
-                <div>very hq website.</div>
-                <br>
                 <div>{{adFoot[0]}} <a href="{{adFoot[2]}}">{{adFoot[1]}}</a></div>
                 <br>
-                <a href="/beta">Take me back to the old page!</a>
-                <div><a href="mailto:jakeratman@airmail.cc">Report a bug.</a></div>
-
+                <div><a href="mailto:jakeratman@airmail.cc">Report a bug</a> | <a href="/rules">Rules</a></div>
+                <br>
+                <div>© 2005 <a href="http://jake.chiyo.org/">[Rats In Space]</a> BETA!</div>
+                <div>© 2000 <a href="http://chiyo.org/">ChiyoNet Online</a></div>
             </div>
         </div>
 

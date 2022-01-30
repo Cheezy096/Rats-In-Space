@@ -1,5 +1,9 @@
 {% extends "cosmic/base.html" %}
 
+{% block title %}
+    <title>{{board[0]}} - [RATS IN SPACE]</title>
+{% endblock %}
+
 {% block content %}
 
     <h3><a href="/">Board List</a> >> {{board[0]}}</h3>
@@ -9,10 +13,16 @@
 
         <h3>Create a thread!</h3>
 
-        <textarea cols=" id="body" name="board_content" rows="5" style="width: 80%;"></textarea>
+        <textarea cols=" id="body" name="board_content" rows="5" style="resize: none; width: 80%;"></textarea>
         <br>
         <br>
         <input id="generalButton" type="submit" value="Create thread"/>
+        {% if session["username"] %}
+            <br>
+            <br>
+            <input type="checkbox" name="nouser" {% if anon %} checked {% endif %}/>Don't create as "{{session["username"]}}"!</input>
+        {% endif %}
+
         {% if boardPostFailed %}
             <p style="color: rgb(109, 0, 0); font-size: 15px;">{{boardPostFailed}}</p>
         {% else %}
@@ -24,32 +34,41 @@
     <br>
     <br>
 
-    <table style="width:100%;"">
-        <tr>
-            <th>Name</th>
-            <th width="4%">ID</th>
-        </tr>
-        {% set count = namespace(value=0) %}
+    <br>
 
-        {% for x in thread %}
-            {% set count.value = count.value + 1 %}
+    {% set count = namespace(value=0) %}
+    {% for x in thread|reverse %}
+        
+        {% set count.value = count.value + 1 %}
+        {% set id = namespace(value=x[4]) %}
 
-        <tr>
-            <td><a href="/b/{{board[2]}}/{{x[1]}}">{{x[0]}}</a></td>
-            <td>{{x[1]}}</td>
-        </tr>
-        {% endfor %}
-
-        {% if count.value == 0 %}
-
-        <tr>
-            <td colspan="3"><strong>No active threads.</strong></td>
-        </tr>
-
+        {% if not x[5] or x[5] == "Anon" %}
+            {% set id = namespace(value=0) %}
         {% endif %}
 
-</table>
-<br>
+        <table style="width:100%; table-layout: fixed;">
+            <a name="a"></a>
+                <tr>
+                    <th style="font-weight:normal;"><b>Thread ID:</b> {{x[1]}}<br><b>User:</b> {{x[5]}} {% if x[5] != "Anon" %} <a href="/u/{{id.value}}">({{id.value}})</a>{% else %} ({{id.value}}) {% endif %} <br><b>Date:</b> {{x[3]}}<br><a href="/b/{{board[2]}}/{{x[1]}}">Jump to thread</a></th>
+                </tr>
 
+                <tr>
+                    <td style="word-wrap: break-word;">{{x[0]}}</td>
+                </tr>
+        </table>
+        <br>
+    {% endfor %}
+
+    {% if count.value == 0 %}
+
+        <table style="width:100%; table-layout: fixed;">
+            <tr>
+                <th style="font-weight:bold;">No active threads.</th>
+            </tr>
+        </table>
+        <br>
+
+
+    {% endif %}
 
 {% endblock %}

@@ -1,11 +1,11 @@
-{% extends "cosmic/base.html" %}
+{% extends "ph/base.html" %}
 
 {% block content %}
 
     <h3><a href="/">Board List</a> >> {{board[0]}}</h3>
 
     <br>
-    <form action="/b/{{board[2]}}/post" method="POST" style="width: 60%; margin-left: 20%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
+    <form action="/b/{{board[2]}}/post" method="POST" style="width: 95%; margin-left: 2%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
 
         <h3>Create a thread!</h3>
 
@@ -19,38 +19,39 @@
             <br>
             <br>
         {% endif %}
-
-
     </form>
+    
     <br>
     <br>
 
-    <table style="width:100%;"">
-        <tr>
-            <th>Name</th>
-            <th width="4%">ID</th>
-        </tr>
-        {% set count = namespace(value=0) %}
+    <br>
 
-        {% for x in thread %}
-            {% set count.value = count.value + 1 %}
+    {% set count = namespace(value=0) %}
+    {% for x in thread|reverse %}
+        {% set count.value = count.value + 1 %}
+        <table style="width:100%; table-layout: fixed;">
+            <a name="a"></a>
+                <tr>
+                    <th style="font-weight:normal;"><b>Thread ID:</b> {{x[1]}}<br><a href="/b/{{board[2]}}/{{x[1]}}">Jump to thread</a></th>
+                </tr>
 
-        <tr>
-            <td><a href="/b/{{board[2]}}/{{x[1]}}">{{x[0]}}</a></td>
-            <td>{{x[1]}}</td>
-        </tr>
-        {% endfor %}
+                <tr>
+                    <td style="word-wrap: break-word;">{{x[0]}}</td>
+                </tr>
+        </table>
+        <br>
+    {% endfor %}
 
-        {% if count.value == 0 %}
+    {% if count.value == 0 %}
 
-        <tr>
-            <td colspan="3"><strong>No active threads.</strong></td>
-        </tr>
+        <table style="width:100%; table-layout: fixed;">
+            <tr>
+                <th style="font-weight:bold;">No active threads.</th>
+            </tr>
+        </table>
+        <br>
 
-        {% endif %}
 
-</table>
-<br>
-
+    {% endif %}
 
 {% endblock %}

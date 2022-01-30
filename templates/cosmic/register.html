@@ -1,5 +1,9 @@
 {% extends "cosmic/base.html" %}
 
+{% block title %}
+    <title>Register - [RATS IN SPACE]</title>
+{% endblock %}
+
 {% block content %}
 
     <h3><a href="/">Board List</a> >> Register!</h3>
@@ -16,21 +20,22 @@
         <textarea type="text" cols=" id="body" name="password" rows="1" placeholder="Password..." style="height: 20px; width: 80%;"></textarea>
 
         <br>
-
-        <input type="checkbox" name="nohash"/>Do not hash my password!
-
-        <br>
         <br>
 
         <input id="generalButton" type="submit" value="Register"/>
 
         <br>
-        {% if dumbpass %}
-            <p style="color: rgb(131, 0, 0);">Can't set an empty password!</p>
-        {% elif dumbname %}
-            <p style="color: rgb(131, 0, 0);">User already exists!</p>
-        {% endif %}
         <br>
+
+        <input type="checkbox" name="nohash"/>Do not hash my password!
+
+
+        {% if errorMessage %}
+            <p style="color: rgb(131, 0, 0);">{{errorMessage}}</p>
+        {% else %}
+            <br>
+            <br>
+        {% endif %}
 
     </form>
     <br>

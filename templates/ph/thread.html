@@ -1,17 +1,23 @@
-{% extends "cosmic/base.html" %}
+{% extends "ph/base.html" %}
 
 {% block content %}
 
     <h3><a href="/">Board List</a> >> <a href="/b/{{board[2]}}">{{board[0]}}</a> >> {{thread[0]}}</h3>
 
     <br>
-    <form action="/b/{{board[2]}}/{{thread[1]}}/post" method="POST" style="width: 60%; margin-left: 20%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
+    <form action="/b/{{board[2]}}/{{thread[1]}}/post" method="POST" style="width: 95%; margin-left: 2%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
         <h3>Leave a comment!</h3>
 
         <textarea cols=" id="body" name="thread_content" rows="5" style="width: 80%;"></textarea>
         <br>
-        <br>
+        <br>        
         <input id="generalButton" type="submit" value="Post comment"/>
+        {% if session["username"] %}
+            <br>
+            <br>
+            <input type="checkbox" name="nouser"/>Don't post as "{{session["username"]}}"!</input>
+        {% endif %}
+
         {% if threadPostFailed %}
                 <p style="color: rgb(109, 0, 0); font-size: 15px;">{{threadPostFailed}}</p>
         {% else %}
@@ -25,14 +31,22 @@
 
     {% set count = namespace(value=0) %}
 	{% for x in post %}
+        {% set id = namespace(value=x[5]) %}
+
         {% if x[2] == board[2] %}
             <table style="width:100%; table-layout: fixed;">
                 <a name="{{x[1]}}"></a>
                 <tr>
+                    {% if not x[6] or x[6] == "Anon" %}
+                        {% set id = namespace(value=0) %}
+                    {% endif %}
+
+                
+
                 {% if flashCommentHeader == x[1] %}
-                    <th style="font-weight:normal; background-color: rgb(57, 57, 153) !important; color: white !important;"><b>User:</b> Anon <a href="/p/{{x[1]}}" style="color: aqua;">({{x[1]}})</a><br><b>Date:</b> {{x[4]}}</th>
+                    <th style="font-weight:normal; background-color: rgb(57, 57, 153) !important; color: white !important;"><b>User:</b> {{x[6]}} <a href="/p/{{x[1]}}" style="color: aqua;">({{x[1]}})</a><br><b>Date:</b> {{x[4]}}</th>
                 {% else %}
-                    <th style="font-weight:normal;"><b>User:</b> Anon <a href="/p/{{x[1]}}">({{x[1]}})</a><br><b>Date:</b> {{x[4]}}</th>
+                    <th style="font-weight:normal;"><b>Post ID:</b> <a href="/p/{{x[1]}}">({{x[1]}})</a><br><b>User:</b> {{x[6]}} ({{id.value}})<br><b>Date:</b> {{x[4]}} </th>
                 {% endif %} 
                 
                 </tr>
@@ -51,9 +65,13 @@
 
     {% if count.value == 0 %}
 
-        <tr>
-            <td colspan="3"><strong>No comments available.</strong></td>
-        </tr>
+        <table style="width:100%; table-layout: fixed;">
+            <tr>
+                <th style="font-weight:bold;">No comments available.</th>
+            </tr>
+        </table>
+        <br>
+
     {% endif %}
 
 

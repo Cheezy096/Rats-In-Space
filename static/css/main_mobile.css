@@ -1,0 +1,211 @@
+* {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+body {
+    background-color:#000000; 
+    background-image: url('/static/images/JPG/comedy.png');
+    background-size: cover;
+}
+
+@media (max-device-width: 320px) {
+  body {
+    background-color:#000000; 
+
+    background-image: url('/static/images/JPG/comedy.png'); 
+  }
+}
+
+a {
+  color: rgb(0, 83, 116);
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(1, 116, 161);
+  text-decoration: underline;
+}
+
+.brightlink {
+  color: rgb(51, 197, 255);
+  text-decoration: none;
+}
+
+.brightlink:hover {
+  color: rgb(112, 215, 255);
+  text-decoration: underline;
+}
+
+.main {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header {
+    background: linear-gradient(to right, #ccffff -81%, #000099 123%);
+    text-align: center; 
+    color: white;
+}
+
+@media (max-device-width: 320px) {
+  .header {
+    background-color: #000099;
+    text-align: center; 
+    color: white;
+  }
+}
+
+.headertitle {
+  color: white;
+  text-decoration: none;
+}
+
+.headertitle:hover {
+  color: #90c2fa;
+  text-decoration: none;
+}
+
+.tab2 {
+  overflow: hidden;
+  border: 1px solid rgb(0, 0, 0);
+  background-color: rgb(167, 166, 166);
+}
+
+.tab2 button {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  background-color: rgb(173, 173, 173);
+  float: left;
+  border: 2px solid rgb(100, 100, 100);
+  cursor: pointer;
+  padding: 5px 16px;
+  margin-left: 2px;
+  font-size: 17px;
+}
+
+.tab2 button:hover {
+  color:white;
+  background-color: rgb(79, 80, 179);
+}
+
+.tab2 button.active {
+  color:white;
+  background-color: rgb(1, 4, 179);
+}
+
+.tab {
+    overflow: hidden;
+}
+
+.tab button {
+  background-color: rgb(173, 173, 173);
+  float: left;
+  border: 2px solid rgb(100, 100, 100);
+  border-bottom: none;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  cursor: pointer;
+  padding: 7px 8px;
+  margin-left: 2px;
+  font-size: 17px;
+}
+
+@media (max-device-width: 320px) {
+  .tab button {
+    background-color: rgb(173, 173, 173);
+    float: left;
+    border: 2px solid rgb(100, 100, 100);
+    border-bottom: none;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    cursor: pointer;
+    padding: 7px 4px;
+    bottom: 0;
+    margin-left: 2px;
+    font-size: 15px;
+  }
+} 
+
+.tab button:hover {
+  color:white;
+  background-color: rgb(79, 80, 179);
+}
+
+.tab button.active {
+  color:white;
+  background-color: rgb(1, 4, 179);
+}
+
+.tabcontenta {
+  background-color: #ccc;
+  padding: 6px 12px;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.tabcontent a {
+  color: rgb(0, 47, 177);
+  text-decoration: none;
+}
+
+.tabcontent a:hover {
+  text-decoration: underline;
+}
+
+.footer {
+    border: 1px solid rgb(0, 0, 0);
+    border-top: none;
+    background-color: #ccc;
+    width: 70%;
+    padding: 6px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  padding: 3.5px;
+  border: 1px solid #000000;
+  text-align: left;
+}
+
+th {
+    background-color:rgb(153, 153, 153);
+}
+
+#generalButton {
+  background-color: #c0c0c0;
+  width: 81%;
+  height: 30px;
+  border-style: outset;
+  border-top-color: white;
+  border-left-color: white;
+  border-right-color: black;
+  border-bottom-color: black;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+#generalButton:active {
+  background-color: #969696;
+  border-style: inset;
+  border-top-color: black;
+  border-left-color: black;
+  border-right-color: rgb(219, 219, 219);
+  border-bottom-color: rgb(219, 219, 219);
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.line {
+  margin-left: 5%;
+  width: 90%;
+  height: 1.5px;
+  background-color:rgb(61, 61, 61);
+}

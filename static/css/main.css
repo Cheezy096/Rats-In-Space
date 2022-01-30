@@ -46,7 +46,7 @@ a:hover {
 }
 
 .headertitle:hover {
-  color: rgb(120, 232, 252);
+  color: #90c2fa;
   text-decoration: none;
 }
 
@@ -176,4 +176,14 @@ th {
   width: 90%;
   height: 1.5px;
   background-color:rgb(61, 61, 61);
+}
+
+.zoom {
+  font-size: 20px;
+  color: white;
+}
+
+.zoom:hover {
+  font-size: 50px;
+  color: green;
 }

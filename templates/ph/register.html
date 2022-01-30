@@ -1,23 +1,19 @@
-{% extends "cosmic/base.html" %}
+{% extends "ph/base.html" %}
 
 {% block content %}
 
     <h3><a href="/">Board List</a> >> Register!</h3>
 
     <br>
-    <form action="/register" method="POST" style="width: 60%; margin-left: 20%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
+    <form action="/register" method="POST" style="width: 95%; margin-left: 2%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
         <h3>Create an account!</h3>
 
-        <textarea type="text" cols=" id="body" name="username" rows="1" placeholder="Username..." style="height: 20px; width: 80%;"></textarea>
+        <textarea type="text" cols=" id="body" name="username" rows="1" placeholder="Username..." style="height: 25px; width: 80%;"></textarea>
 
         <br>
         <br>
 
-        <textarea type="text" cols=" id="body" name="password" rows="1" placeholder="Password..." style="height: 20px; width: 80%;"></textarea>
-
-        <br>
-
-        <input type="checkbox" name="nohash"/>Do not hash my password!
+        <textarea type="text" cols=" id="body" name="password" rows="1" placeholder="Password..." style="height: 25px; width: 80%;"></textarea>
 
         <br>
         <br>
@@ -26,6 +22,18 @@
 
         <br>
         <br>
+
+        <input type="checkbox" name="nohash"/>Do not hash my password!
+
+
+        {% if dumbpass %}
+            <p style="color: rgb(131, 0, 0);">Can't set an empty password!</p>
+        {% elif dumbname %}
+            <p style="color: rgb(131, 0, 0);">User already exists!</p>
+        {% else %}
+            <br>
+            <br>
+        {% endif %}
 
     </form>
     <br>

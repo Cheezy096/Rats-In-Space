@@ -2,41 +2,50 @@
 <html>
 
     <head>
+
+        {% block title %}
+            <title>[RATS IN SPACE]</title>
+        {% endblock %}
+
+        <meta content="[RATS IN SPACE]" property="og:title" />
+        <meta content="The official home for rats! No refunds." property="og:description" />
+        <meta content="http://jake.chiyo.org/" property="og:url" />
+        <meta content="jake.chiyo.org/static/images/JPG/rat.jpg" property="og:image" />
+        <meta content="#721010" data-react-helmet="true" name="theme-color" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/static/css/main.css">
+        <link rel="icon" href="/static/images/JPG/rat.jpg">
     </head>
-    
-    <body>
-        <div class="main">
 
+    <body> 
+        <div class="main">
             <div class="header">
-                <h2 style="font-size: 30px;"><i>[RATS IN SPACE]</i></h2>
+                <h2 style="font-size: 30px;"><i><a href="/" class="headertitle">[RATS IN SPACE]</a></i><br><span style="font-size: 25px;">BETA!</span></h2>
 
                 {% if session["username"] %}
                     <p> Welcome, <b>{{session["username"]}}</b><br><a href="/logout" class="brightlink">Logout</a></p>
                 {% else %}
-                    <p>Woah ass ahoy<br><a href="/login" class="brightlink">Log in</a> or <a href="/login" class="brightlink">Register</a></p>
+                    <p>Woah ass ahoy<br><a href="/login" class="brightlink">Log in</a> or <a href="/register" class="brightlink">Register</a></p>
                         
                 {% endif %}
-
             </div>
 
             <div class="tabcontenta">
-                <div id="t1" class="tabcontent">
+                <div class="tabcontent">
                     {% block content %}
 
                     {% endblock %}
                 </div>
             </div>
 
-            
             <div class="footer">
-                <div>© 2005 [Rats In Space] BETA!</div>
-                <div>very hq website.</div>
+                <div>{{adFoot[0]}} <a href="{{adFoot[2]}}">{{adFoot[1]}}</a></div>
                 <br>
-                <a href="/beta">Take me back to the old page!</a>
+                <div><a href="mailto:jakeratman@airmail.cc">Report a bug</a> | <a href="/rules">Rules</a></div>
+                <br>
+                <div>© 2005 <a href="http://jake.chiyo.org/">[Rats In Space]</a> BETA!</div>
+                <div>© 2000 <a href="http://chiyo.org/">ChiyoNet Online</a></div>
             </div>
         </div>
-
     </body>
 </html> 

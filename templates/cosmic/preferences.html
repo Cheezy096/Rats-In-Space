@@ -1,0 +1,80 @@
+{% extends "cosmic/base.html" %}
+
+{% block title %}
+    <title>Preferences - [RATS IN SPACE]</title>
+{% endblock %}
+
+{% block content %}
+
+    <style>
+        * {
+            text-align: center;
+        }
+    
+        h3{
+            text-align: left;
+        }
+    </style>
+
+    <h3>Preferences</h3>
+
+    <form action="/u/preferences" method="POST">
+
+        <div style="border: 1px solid black; background-color: #999999;">
+            <h4>User Information:</h4>
+            {% if errorMessage %}
+                <p style="color: rgb(131, 0, 0);">{{errorMessage}}</p>
+            {% endif %}    
+            <p style="margin: 0;">username.</p>
+            <textarea type="text" cols=" id="body" name="username" rows="1" style="resize: none; height: 20px; width: 30%;">{{session['username']}}</textarea>
+            <br>
+            <br>
+            <p style="margin: 0;">about me.</p>
+            {% if not user[5] %}
+                {% set info = "" %}
+            {% else %}
+                {% set info = user[5] %}
+            {% endif %}
+            <textarea cols=" id="body" name="userinfo" rows="5" style="resize: none; width: 80%; content: 'wow'; text-align: left;">{{info}}</textarea>
+            <br>
+            <br>
+            <p style="margin: 0;">avatar.</p>
+            <select name="avatarselection">
+                <option {% if user[8] == 'rat1'%} selected {% endif %}>rat1</option>
+                <option {% if user[8] == 'rat2'%} selected {% endif %}>rat2</option>
+                <option {% if user[8] == 'rat3'%} selected {% endif %}>rat3</option>
+                <option {% if user[8] == 'rat4'%} selected {% endif %}>rat4</option>
+                <option {% if user[8] == 'quack'%} selected {% endif %}>quack</option>
+            </select>
+            <br>
+            <br>
+        </div>
+
+        <br>
+        <br>
+
+        <div style="border: 1px solid black; background-color: #999999;">
+            <h4>User Settings:</h4>
+            <input type="checkbox" name="nouser" {% if user[10] %} checked {% endif %}/>Don't post as "{{session["username"]}}"!</input>
+            <br>
+            <br>
+            <input type="checkbox" name="beta" {% if user[9] %} checked {% endif %}/>Use the bleeding edge!!!!!</input>
+            <br>
+            <br>
+            <input type="checkbox" name="loginmemory"/>Remember me for login</input>
+            <br>
+            <br>
+        </div>
+        <br>
+        <br>
+
+        <div style="border: 1px solid black; background-color: #999999;">
+            <br>
+            <input id="generalButton" type="submit" value="Save settings"/>
+            <br>
+            <br>
+        </div>
+
+        <br>
+        <br>
+{% endblock %}

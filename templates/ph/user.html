@@ -1,0 +1,45 @@
+{% extends "ph/base.html" %}
+
+{% block content %}
+
+    {% if user %}
+        <img src="/static/images/JPG/rat.jpg" style="border: rgb(0, 0, 0) inset 2px; float: left;" width="100" height="100"></img>
+        <p style="text-indent: 10px; font-size: 20px; font-weight: bold;">{{user[0]}}</p>
+        <p style="text-indent: 10px;">ID: <b>{{user[2]}}</b></p>
+        <p style="text-indent: 10px;">Created at: <b>{{user[4]}}</b></p>
+
+        <br>
+
+
+
+        <div style="border: black solid 1px;">
+            <p style="font-weight: bold; text-align: center; margin-top: 0%; padding-bottom: 2px; background-color: #999999; border-bottom: black solid 1px;">{{user[0]}}'s posts</p>
+            {% set count = namespace(value=0) %}
+            {% for x in posts|reverse %}
+                {% set count.value = count.value + 1 %}
+
+                <table style="width:95%; table-layout: fixed; margin-left: 2.5%;">
+                    <a name="/u/{{user[2]}}"></a>
+                    <tr>
+                        <th style="font-weight:normal;"><b>Post ID:</b> <a href="/u/{{x[1]}}">{{x[1]}}</a><br><b>User:</b> {{x[6]}}<br><b>Date:</b> {{x[4]}}</th>
+                    </tr>
+        
+                    <tr>
+                        <td style="word-wrap: break-word;">{{x[0]}}</td>
+                    </tr>
+                </table>
+                <br>
+            {% endfor %}
+
+            {% if count.value == 0 %}
+                <p>This user has made no posts.</p>
+            {% endif %}
+
+            </div>
+            <br>
+    {% else %}
+        <h3>this user does not exist!</h3>
+
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "ph/base.html" %}
+
+{% block content %}
+
+    <h3><a href="/">Board List</a> >> new news</h3>
+
+    <br>
+    <form action="/newnews" method="POST" style="width: 60%; margin-left: 20%; text-align: center; background-color: #999999; border-style: solid; border-color: black; border-width: 1px;">
+        <h3>new news</h3>
+
+        <textarea type="text" cols=" id="body" name="news_subject" rows="1" placeholder="Subject..." style="height: 20px; width: 80%;"></textarea>
+
+        <br>
+        <br>
+
+        <textarea type="text" cols=" id="body" name="news_content" rows="1" placeholder="Content..." style="height: 100px; width: 80%;"></textarea>
+
+        <br>
+        <br>
+
+        <input id="generalButton" type="submit" value="Submit"/>
+
+        <br>
+        <br>
+
+    </form>
+    <br>
+    <br>
+
+{% endblock %}
